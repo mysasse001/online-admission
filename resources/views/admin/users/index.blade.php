@@ -15,8 +15,8 @@
             <th>Name</th>
             <th>Created by</th>
             <th>Created At</th>
-            <th>Updated At</th>
-            <th>Action</th>
+            <th>Download</th>
+            {{-- <th>Action</th> --}}
         </tr>
     </thead>
     <tbody>

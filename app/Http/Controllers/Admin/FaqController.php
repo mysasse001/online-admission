@@ -13,7 +13,15 @@ class FaqController extends Controller
     }
 
     public function index(){
-        return view('admin.faq.index');
+        $home = Design::first();
+
+        if(auth()->user()->role->name == 'adminstrator')
+        {
+            return view('admin.faq.index');
+        }
+        else{
+            return redirect('home');
+        }
     }
 
     public function store(Request $request){

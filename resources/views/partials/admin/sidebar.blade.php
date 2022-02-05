@@ -1,70 +1,24 @@
-<!-- Main Sidebar Container -->
-<aside class="main-sidebar sidebar-dark-primary elevation-4">
-    <!-- Brand Logo -->
-    <a href="{{route('admin-dashboard')}}" class="brand-link">
 
-      <span class="brand-text font-weight-light">Admin</span>
-    </a>
 
-    <!-- Sidebar -->
-    <div class="sidebar">
-      <!-- Sidebar user panel (optional) -->
-      <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-
-        <div class="info">
-          <a href="#" class="d-block">{{ auth()->user()->name }}</a>
-        </div>
-      </div>
-
-      <!-- Sidebar Menu -->
-      <nav class="mt-2">
-        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-          <!-- Add icons to the links using the .nav-icon class
+    <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
-          <li class="nav-item"><a class="nav-link" href="{{ route('admin-dashboard') }}">My Dashboard</a></li>
+               <li class="nav-item "><a class="nav-link {{request()->routeIs('welcome') ? 'active':''}}" href="{{ route('welcome') }}">Home</a></li>
+               <li class="nav-item "><a class="nav-link {{request()->routeIs('home') ? 'active':''}}" href="{{ route('home') }}">My Dashboard</a></li>
+               <li class="nav-item "><a class="nav-link {{request()->routeIs('design.index') ? 'active':''}}" href="{{ route('design.index') }}">Design</a></li>
+               <li class="nav-item "><a class="nav-link {{request()->routeIs('programme.index') ? 'active':''}}" href="{{ route('programme.index') }}"><span class="badge badge-primary">{{$programmes->count()}}</span> {{$programmes->count() == 1 ? 'Programme':'Programmes'}} Dashboard</a></li>
+               <li class="nav-item "><a class="nav-link {{request()->routeIs('applicationDashboard') ? 'active':''}}" href="{{ route('applicationDashboard') }}"><span class="badge badge-primary">{{$applications->count()}}</span> {{$applications->count() == 1 ? 'Application':'Applications'}} Dashboard</a></li>
+               <li class="nav-item "><a class="nav-link {{request()->routeIs('admin.message.index') ? 'active':''}}" href="{{ route('admin.message.index') }}">Inquiries</a></li>
+               <li class="nav-item "><a class="nav-link {{request()->routeIs('faq.index') ? 'active':''}}" href="{{ route('faq.index') }}">FAQ</a></li>
+               @if(auth()->user()->id == 1)
+               <li class="nav-item "><a class="nav-link {{request()->routeIs('roles') ? 'active':''}}" href="{{ route('roles') }}">Admins</a></li>
+               @endif
+     
+               <li class="nav-item "><a class="nav-link {{request()->routeIs('admin.users') ? 'active':''}}" href="{{ route('admin.users') }}">Registered Applicants</a></li>
+               <li class="nav-item "><a class="nav-link {{request()->routeIs('locations') ? 'active':''}}" href="{{ route('locations') }}">Locations</a></li>
 
-          <li class="nav-item"><a class="nav-link" href="{{ route('category.index') }}">Categories</a></li>
-          <li class="nav-item"><a class="nav-link" href="{{ route('department.index') }}">Departments</a></li>
-          <li class="nav-item"><a class="nav-link" href="{{ route('intake.index') }}">Intake Name</a></li>
-          <li class="nav-item"><a class="nav-link" href="{{ route('academic-year') }}">Academic Year</a></li>
-          <li class="nav-item has-treeview">
-            <a href="#" class="nav-link">
-
-              <p>
-                Programmes
-                <i class="fas fa-angle-left right"></i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="{{ route('programme.index') }}" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>All Programmes</p>
-                </a>
-              </li>
-
-              <li class="nav-item">
-                <a href="{{ route('programme.create') }}" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Add Programme</p>
-                </a>
-              </li>
-
-            </ul>
-          </li>
-          <li class="nav-item"><a class="nav-link" href="{{ route('admin.message.index') }}">Inquiries</a></li>
-          <li class="nav-item"><a class="nav-link" href="{{ route('faq.index') }}">FAQ</a></li>
-          <li class="nav-item"><a class="nav-link" href="{{ route('examinedBy.index') }}">Examined By</a></li>
-          <li class="nav-item"><a class="nav-link" href="{{ route('educationSystem.index') }}">Education System</a></li>
-          <li class="nav-item"><a class="nav-link" href="{{ route('country.index') }}">Country</a></li>
-
-          <li class="nav-item"><a class="nav-link" href="{{ route('admin.users') }}">Registered Applicants</a></li>
-          <li class="nav-item"><a class="nav-link" href="{{ route('admin.users') }}">Registered Applicants</a></li>
-
-
-        </ul>
-      </nav>
-      <!-- /.sidebar-menu -->
-    </div>
-    <!-- /.sidebar -->
-  </aside>
+               
+               <li class="nav-item " ><a class="nav-link {{request()->routeIs('paymentOptions') ? 'active':''}}" href="{{ route('paymentOptions') }}">Payment Methods</a></li>
+               <li class="nav-item "><a class="nav-link {{request()->routeIs('instructions.edit') ? 'active':''}}" href="{{ route('instructions.edit') }}">Edit Application Instructions</a></li>
+               
+     
+     

@@ -10,8 +10,18 @@ use App\Http\Controllers\Controller;
 class EducationSystemController extends Controller
 {
 
+    public function __construct()
+    {
+        return $this->middleware(['auth']);
+    }
+
     public function index(){
-        return view('admin.educationsystem.index');
+        if(auth()->user()->role->name == 'adminstrator')
+        {
+            return view('admin.educationsystem.index');
+        }else{
+            return view('home');
+        }
     }
 
     public function store(Request $request){

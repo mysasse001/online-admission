@@ -15,7 +15,7 @@ class CreateIntakesTable extends Migration
     {
         Schema::create('intakes', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('user_id')->constrained()->nullable();
             $table->string('name');
             $table->timestamps();
         });

@@ -8,8 +8,17 @@ use App\Http\Controllers\Controller;
 
 class ExaminedByController extends Controller
 {
+    public function __construct()
+    {
+        return $this->middleware(['auth']);
+    }
     public function index(){
-      return view('admin.examinedby.index');
+        if(auth()->user()->role->name == 'adminstrator')
+        {
+            return view('admin.examinedby.index');
+        }else{
+            return view('home');
+        }
     }
 
     public function store(Request $request){

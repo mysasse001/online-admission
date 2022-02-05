@@ -18,7 +18,7 @@ class User extends Authenticatable implements MustVerifyEmail
      * @var array
      */
     protected $fillable = [
-        'name', 'email','password','surname','mname'
+        'name', 'email','password','surname','mname','role_id','country_code','telephone','postal_address','postal_code','town','email_verified_at'
     ];
 
     /**
@@ -39,6 +39,16 @@ class User extends Authenticatable implements MustVerifyEmail
         'email_verified_at' => 'datetime',
     ];
 
+    public function role()
+    {
+        return $this->belongsTo(Role::class);
+    }
+
+    public function design(){
+        return $this->hasOne(Design::class);
+    }
+
+
     //admin
     public function departments(){
         return $this->hasMany(Department::class);
@@ -56,7 +66,7 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(Intake::class);
     }
     public function application(){
-        return $this->hasOne(Application::class);
+        return $this->hasMany(Application::class);
     }
 
     public function programmes(){
@@ -97,4 +107,49 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(Country::class);
     }
 
+    public function applicationDeadlines()
+    {
+        return $this->hasMany(ApplicationDeadline::class);
+    }
+
+    public function reportingDates()
+    {
+        return $this->hasMany(ReportingDate::class);
+    }
+
+    //profile setup
+    public function refereeContacts()
+    {
+        return $this->hasMany(RefereeContact::class);
+    }
+
+    public function nextOfKin()
+    {
+        return $this->hasOne(NextOfKin::class);
+    }
+    
+    public function contactInformation()
+    {
+        return $this->hasOne(ContactInformation::class);
+    }
+
+    public function workExperiences()
+    {
+        return $this->hasMany(WorkExperience::class);
+    }
+
+    public function educationBackgrounds()
+    {
+        return $this->hasMany(EducationBackground::class);
+    }
+
+    public function personalInformation()
+    {
+        return $this->hasOne(PersonalInformation::class);
+    }
+
+    public function title()
+    {
+        return $this->belongsTo(Title::class);
+    }
 }

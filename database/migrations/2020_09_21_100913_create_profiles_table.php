@@ -18,7 +18,7 @@ class CreateProfilesTable extends Migration
             $table->unsignedBigInteger('user_id');
             $table->text('contact')->nullable();
             $table->string('country')->nullable();
-            $table->unsignedBigInteger('country_id');
+            $table->unsignedBigInteger('country_id')->nullable();
             $table->unsignedBigInteger('examined_by_id')->nullable();
             $table->unsignedBigInteger('education_system_id')->nullable();
             $table->string('institution_name')->nullable();
@@ -70,7 +70,7 @@ class CreateProfilesTable extends Migration
             $table->text('location')->nullable();
             $table->text('sub_location')->nullable();
             $table->text('landmark')->nullable();
-
+            $table->enum('identification_document',['birthCertificate','nationalId','passport'])->nullable();
             $table->timestamps();
         });
     }

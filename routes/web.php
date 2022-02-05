@@ -1,6 +1,19 @@
 <?php
 
+use App\Http\Controllers\Admin\ApplicationsController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\admin\DesignController;
+use App\Http\Controllers\ApplicationDeadlinesController;
+use App\Http\Controllers\ApplicationStatusController;
+use App\Http\Controllers\Auth\VerificationController;
+use App\Http\Controllers\InstructionsController;
+use App\Http\Controllers\LocationsController;
+use App\Http\Controllers\PagesController;
+use App\Http\Controllers\PaymentOptionController;
+use App\Http\Controllers\PaymentOptionStepsController;
+use App\Http\Controllers\ReportingDatesController;
+use App\Http\Controllers\RolesController;
+use App\Http\Controllers\Student\ApplicationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,20 +26,59 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+
+
 Route::get('pdf-view',function(){
     return view('test-download');
 });
 
-Auth::routes(['verify'=>true]);
+Route::get('/instructions',[PagesController::class,'instructions'])->name('instructions');
 
-Route::get('/', [App\Http\Controllers\PagesController::class, 'index'])->name('home');
+Auth::routes(['verify' => true]);
 
-Route::get('/home',[App\Http\Controllers\HomeController::class,'index']);
+Route::get('/', [App\Http\Controllers\PagesController::class, 'index'])->name('welcome');
+
+Route::get('/home',[App\Http\Controllers\HomeController::class,'index'])->name('home');
+
+    //design
+    Route::get('designs',[DesignController::class,'index'])->name('design.index');
+    Route::get('designs/create',[DesignController::class,'create'])->name('design.create');
+    Route::post('design',[DesignController::class,'store'])->name('design.store');
+    Route::get('design/{home}/edit',[DesignController::class,'edit'])->name('design.edit');
+    Route::patch('design/{home}',[DesignController::class,'update'])->name('design.update');
+
+    
 //Admin
-Route::group(['middleware' => ['auth','admin','verified']], function () {
+Route::group(['middleware' => ['auth','verified']], function () {
     Route::get('/admin/dashboard',[App\Http\Controllers\Admin\DashboardController::class,'dashboard'])->name('admin-dashboard');
     Route::get('registered-applicants',[App\Http\Controllers\Admin\DashboardController::class,'users'])->name('admin.users');
 Route::get('/registered-applicants/{user}',[App\Http\Controllers\Admin\DashboardController::class,'downloadusers'])->name('download.user');
+
+Route::get('/roles',[RolesController::class,'index'])->name('roles');
+Route::patch('/add/admin',[RolesController::class,'adminAdd'])->name('admin.add');
+Route::patch('/remove/{user}/admin',[RolesController::class,'adminRemove'])->name('admin.remove');
+
+//payment options
+Route::get('payment/options',[PaymentOptionController::class,'index'])->name('paymentOptions');
+Route::post('payment/options/store',[PaymentOptionController::class,'store'])->name('paymentOptions.store');
+Route::get('payment/options/{paymentOption}/steps',[PaymentOptionController::class,'show'])->name('paymentOptions.show');
+Route::patch('payment/options/{paymentOption}/update',[PaymentOptionController::class,'update'])->name('paymentOptions.update');
+Route::delete('payment/options/{paymentOption}/delete',[PaymentOptionController::class,'destroy'])->name('paymentOptions.delete');
+
+//payment option step
+Route::post('/payment/options/{paymentOption}/step/store',[PaymentOptionStepsController::class,'store'])->name('paymentOption.step.store');
+Route::patch('/payment/options/{paymentOptionStep}/step/update',[PaymentOptionStepsController::class,'update'])->name('paymentOption.step.update');
+Route::delete('/payment/options/{paymentOptionStep}/step/delete',[PaymentOptionStepsController::class,'destroy'])->name('paymentOption.step.delete');
+
+//locations
+Route::get('/locations',[LocationsController::class,'index'])->name('locations');
+Route::post('/locations',[LocationsController::class,'store'])->name('locations.store');
+Route::patch('/locations/{location}/update',[LocationsController::class,'update'])->name('locations.update');
+Route::delete('/locations/{location}/delete',[LocationsController::class,'destroy'])->name('locations.delete');
+
+//instructions
+Route::get('/edit/instruction',[InstructionsController::class,'edit'])->name('instructions.edit');
+Route::patch('/update/{instruction}/instruction',[InstructionsController::class,'update'])->name('instructions.update');
 
     Route::get('/categories',[App\Http\Controllers\Admin\CategoryController::class,'index'])->name('category.index');
     Route::post('/categories/store',[App\Http\Controllers\Admin\CategoryController::class,'store'])->name('category.store');
@@ -56,10 +108,10 @@ Route::get('/registered-applicants/{user}',[App\Http\Controllers\Admin\Dashboard
 
 
 
-    Route::get('/academic-year',[App\Http\Controllers\Admin\AcademicYearController::class,'index'])->name('academic-year');
+    Route::get('/academic-year',[App\Http\Controllers\Admin\AcademicYearController::class,'index'])->name('academicyear.index');
     Route::post('/academic-year/store',[App\Http\Controllers\Admin\AcademicYearController::class,'store'])->name('academic-year.store');
-    Route::get('/academic-year/{academicYear}/edit',[App\Http\Controllers\Admin\AcademicYearController::class,'edit'])->name('academic-year.edit');
-    Route::patch('/academic-year/{academicYear}/update',[App\Http\Controllers\Admin\AcademicYearController::class,'update'])->name('academic-year.update');
+    Route::get('/academic-year/cit/{academicYear}/edit',[App\Http\Controllers\Admin\AcademicYearController::class,'edit'])->name('academic-year.edit');
+    Route::patch('/academic-year/upd/{academicYear}/update',[App\Http\Controllers\Admin\AcademicYearController::class,'update'])->name('academicYear.update');
     Route::delete('/academic-year/{academicYear}/delete',[App\Http\Controllers\Admin\AcademicYearController::class,'destroy'])->name('academic-year.delete');
 
 
@@ -67,6 +119,7 @@ Route::get('/registered-applicants/{user}',[App\Http\Controllers\Admin\Dashboard
     Route::get('/programmes/create',[App\Http\Controllers\Admin\ProgrammeController::class,'create'])->name('programme.create');
     Route::get('/programmes/{programme}/edit',[App\Http\Controllers\Admin\ProgrammeController::class,'edit'])->name('programme.edit');
     Route::patch('/programmes/{programme}/update',[App\Http\Controllers\Admin\ProgrammeController::class,'update'])->name('programme.update');
+    Route::patch('/programmes/status/{programme}/update',[App\Http\Controllers\Admin\ProgrammeController::class,'statusUpdate'])->name('programme.status.update');
     Route::delete('/programmes/{programme}/delete',[App\Http\Controllers\Admin\ProgrammeController::class,'destroy'])->name('programme.delete');
     Route::get('/programmelist/{programme}',[App\Http\Controllers\Admin\ProgrammeController::class,'applicationlist'])->name('programme.application.list');
 
@@ -104,20 +157,44 @@ Route::get('/registered-applicants/{user}',[App\Http\Controllers\Admin\Dashboard
     Route::get('/admin-messages/{message}',[App\Http\Controllers\Admin\MessageController::class,'show'])->name('admin.message.show');
     Route::delete('/admin-messages/{message}/delete',[App\Http\Controllers\Admin\MessageController::class,'destroy'])->name('admin.message.delete');
     Route::get('/messages/sent',[App\Http\Controllers\Admin\MessageController::class,'sent'])->name('admin.message.sent');
+
+    //aplication deadlines
+    Route::get('/applicationDealdines',[ApplicationDeadlinesController::class,'index'])->name('applicationDeadline.index');
+    Route::post('/applicationDealdines/store',[ApplicationDeadlinesController::class,'store'])->name('applicationDeadline.store');
+    Route::get('/applicationDealdines/{applicationDeadline}/edit',[ApplicationDeadlinesController::class,'edit'])->name('applicationDeadline.edit');
+    Route::patch('/applicationDealdines/{applicationDeadline}/update',[ApplicationDeadlinesController::class,'update'])->name('applicationDeadline.update');
+    Route::delete('/applicationDealdines/{applicationDeadline}/delete',[ApplicationDeadlinesController::class,'destroy'])->name('applicationDeadline.delete');
+
+    //reporting dates
+    Route::get('/reportingDates',[ReportingDatesController::class,'index'])->name('reportingDate.index');
+    Route::post('/reportingDates/store',[ReportingDatesController::class,'store'])->name('reportingDate.store');
+    Route::get('/reportingDates/{reportingDate}/edit',[ReportingDatesController::class,'edit'])->name('reportingDate.edit');
+    Route::patch('/reportingDates/{reportingDate}/update',[ReportingDatesController::class,'update'])->name('reportingDate.update');
+    Route::delete('/reportingDates/{reportingDate}/delete',[ReportingDatesController::class,'destroy'])->name('reportingDate.delete');
+
+
+    //applications
+    Route::get('applicationDashboard',[App\Http\Controllers\Admin\ApplicationsController::class,'index'])->name('applicationDashboard');
+
+    //application status
+    Route::get('/applicationStatus',[ApplicationStatusController::class,'index'])->name('application.status.index');
+    Route::post('/application/status/store',[ApplicationStatusController::class,'store'])->name('application.status.store');
+    Route::patch('/application/status/{applicationStatus}/update',[ApplicationStatusController::class,'update'])->name('application.status.update');
+    Route::delete('/application/status/{applicationStatus}/delete',[ApplicationStatusController::class,'destroy'])->name('application.status.delete');
+
 });
 
     //REPLY MESSAGE
     Route::post('reply_message_testing_kit/{message}',[App\Http\Controllers\ReplyController::class,'storeReply'])->name('reply.message');
     Route::get('faq',[App\Http\Controllers\Admin\FaqController::class,'front'])->name('faq.front');
 
-
-    Route::get('/programmes/{programme:name}',[App\Http\Controllers\Admin\ProgrammeController::class,'show'])->name('programme.show');
-
-
+    Route::get('/programmes/{programme:slug}',[App\Http\Controllers\Admin\ProgrammeController::class,'show'])->name('programme.show');
 
  //student
 Route::group(['middleware' => ['auth','verified']], function () {
+
 Route::get('/online-application',[App\Http\Controllers\Student\ApplicationController::class,'create'])->name('application.create');
+Route::post('/apply/{programme}/today',[ApplicationController::class,'store'])->name('applicaton.store');
 
 Route::get('/student-dashboard',[App\Http\Controllers\Student\DashboardController::class,'index'])->name('student.dashboard');
 
@@ -128,7 +205,6 @@ Route::patch('tertiary-info',[App\Http\Controllers\ProfileController::class,'ter
 Route::patch('secondary-info',[App\Http\Controllers\ProfileController::class,'secondary'])->name('secondary.details.store');
 //primary
 Route::patch('primary-info',[App\Http\Controllers\ProfileController::class,'primaryschool'])->name('primary.details.store');
-
 
 Route::patch('education-level',[App\Http\Controllers\ProfileController::class,'level'])->name('education.store');
 
@@ -147,16 +223,15 @@ Route::patch('kin-store',[App\Http\Controllers\ProfileController::class,'nextkin
 
 //application-
 Route::get('apply-admission',[App\Http\Controllers\Student\ApplicationController::class,'applyAdmission'])->name('apply-admission');
-
-
+//finalize application
+Route::get('/programme/{programme:slug}/finalize',[ApplicationController::class,'completeApplication'])->name('completeApplication');
+Route::get('/programme/{programme:slug}/finish',[ApplicationController::class,'completeApplication2'])->name('completeApplicationStep2');
 //intake application
-Route::get('intake-application',[App\Http\Controllers\Student\ApplicationController::class,'intakeAdmission'])->name('intake-application');
+Route::get('apply/{category:name}/programmes',[App\Http\Controllers\Student\ApplicationController::class,'intakeAdmission'])->name('intake-application');
+Route::delete('/my-applications/{application}/delete',[App\Http\Controllers\Student\ApplicationController::class,'destroy'])->name('application.delete');
 
 //show programmes according to intake
 Route::get('intake/{intake}',[App\Http\Controllers\Admin\IntakeController::class,'show'])->name('intake.show');
-
-//confirm programme application
-Route::post('/programme/{programme}',[App\Http\Controllers\Admin\ProgrammeController::class,'confirmapplication'])->name('applyprogramme');
 
 
 //select level of study

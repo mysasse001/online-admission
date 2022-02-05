@@ -8,13 +8,23 @@ use App\Http\Controllers\Controller;
 
 class CategoryController extends Controller
 {
+    public function __construct()
+    {
+        return $this->middleware(['auth']);
+    }
     public function index(){
-        return view('admin.category.index');
+        if(auth()->user()->role->name == 'adminstrator')
+        {
+            return view('admin.category.index');
+        }else{
+            return view('home');
+        }
     }
 
     public function store(Request $request){
         $data=$request->validate([
-            'name'=>[]
+            'name'=>[''],
+            'amount'=>''
         ]);
 
         auth()->user()->categories()->create($data);
@@ -27,7 +37,8 @@ class CategoryController extends Controller
 
     public function update(Request $request,Category $category){
         $data=$request->validate([
-            'name'=>[]
+            'name'=>[''],
+            'amount'=>''
         ]);
 
         $category->update($data);

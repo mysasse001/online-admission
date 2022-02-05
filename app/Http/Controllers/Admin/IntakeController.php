@@ -13,7 +13,12 @@ class IntakeController extends Controller
     }
 
     public function index(){
-        return view('admin.intake.index');
+        if(auth()->user()->role->name == 'adminstrator')
+        {
+            return view('admin.intake.index');
+        }else{
+            return view('home');
+        }
     }
 
     public function store(Request $request){
@@ -31,7 +36,12 @@ class IntakeController extends Controller
 
 
     public function edit(Intake $intake){
-        return view('admin.intake.edit',compact('intake'));
+        if(auth()->user()->role->name == 'adminstrator')
+        {
+            return view('admin.intake.edit',compact('intake'));
+        }else{
+            return view('home');
+        }
     }
 
     public function update(Request $request,Intake $intake){

@@ -1,17 +1,21 @@
 <?php
 
 namespace App\Providers;
-use App\Models\Country;
 use App\Models\Faq;
 use App\Models\User;
+use App\Models\Design;
 use App\Models\Intake;
+use App\Models\Country;
 use App\Models\Message;
 use App\Models\Category;
 use App\Models\Programme;
 use App\Models\Department;
 use App\Models\ExaminedBy;
 use App\Models\AcademicYear;
+use App\Models\Application;
 use App\Models\EducationSystem;
+use App\Models\PaymentOption;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
@@ -24,7 +28,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        // Schema::defaultStringLength(191);
     }
 
     /**
@@ -44,5 +48,10 @@ class AppServiceProvider extends ServiceProvider
         View::share('faqs',Faq::all());
         View::share('messages',Message::all());
         View::share('countries',Country::all());
+        View::share('design',Design::latest()->limit(1)->get()[0]);
+        View::share('applications',Application::all());
+        View::share('paymentOptions',PaymentOption::class);
+        Paginator::useBootstrap();
+
     }
 }

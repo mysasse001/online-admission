@@ -1,4 +1,4 @@
-@extends('layouts.admin.dashboard')
+@extends('layouts.programs')
 @section('header')
 <ol class="breadcrumb float-sm-right">
     <li class="breadcrumb-item"><a href="{{ route('admin-dashboard') }}">Home</a></li>
@@ -7,7 +7,7 @@
 @endsection
 @section('content')
 <h4>Edit {{ $intake->name }}</h4>
-<form action="{{ route('intake.update',$intake) }}" method="POST">
+<form  method="POST">
 @csrf
 @method('PATCH')
 <div class="form-group">

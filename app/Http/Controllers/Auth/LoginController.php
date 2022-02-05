@@ -27,15 +27,15 @@ class LoginController extends Controller
      *
      * @var string
      */
-    // protected $redirectTo = '/admin/dashboard';
-    protected function redirectTo(){
-        if(Auth::user()->admin==1){
-            return '/admin/dashboard';
-        }
-        else{
-            return '/student-dashboard';
-        }
-    }
+    protected $redirectTo = '/home';
+    // protected function redirectTo(){
+    //     if(Auth::user()->admin==1){
+    //         return '/admin/dashboard';
+    //     }
+    //     else{
+    //         return '/student-dashboard';
+    //     }
+    // }
 
     /**
      * Create a new controller instance.

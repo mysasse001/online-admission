@@ -20,10 +20,12 @@ class CreateProgrammesTable extends Migration
             $table->unsignedBigInteger('intake_id')->nullable();
             $table->unsignedBigInteger('department_id')->nullable();
             $table->unsignedBigInteger('academic_year_id')->nullable();
-            $table->date('deadline');
-            $table->date('reporting');
+            $table->text('specialization')->nullable();
+            $table->unsignedBigInteger('reporting_date_id')->constrained()->nullable();
+            $table->unsignedBigInteger('application_deadline_id')->constrained()->nullable();
             $table->unsignedBigInteger('user_id');
-            $table->text('details');
+            $table->text('details')->nullable();
+            $table->text('duration')->nullable();
             $table->timestamps();
         });
     }

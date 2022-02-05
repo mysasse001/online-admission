@@ -8,8 +8,17 @@ use App\Http\Controllers\Controller;
 
 class AcademicYearController extends Controller
 {
+    public function __construct()
+    {
+        return $this->middleware(['auth']);
+    }
     public function index(){
-        return view('admin.academicyear.index');
+        if(auth()->user()->role->name == 'adminstrator')
+        {
+            return view('admin.academicyear.index');
+        }else{
+            return view('home');
+        }
     }
 
     public function store(Request $request){
